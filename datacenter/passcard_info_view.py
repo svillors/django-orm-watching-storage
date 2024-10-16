@@ -6,14 +6,14 @@ from django.shortcuts import get_object_or_404
 
 def passcard_info_view(request, passcode):
     passcard = get_object_or_404(Passcard.objects, passcode=passcode)
-    # Программируем здесь
     visits = Visit.objects.all().filter(passcard=passcard)
     this_passcard_visits = []
     for visit in visits:
-        visit_info = {}
-        visit_info['entered_at'] = visit.entered_at
-        visit_info['duration'] = visit.format_duration()
-        visit_info['is_strange'] = visit.is_visit_long()
+        visit_info = {
+            'entered_at': visit.entered_at,
+            'duration': visit.format_duration(),
+            'is_strange': visit.is_visit_long()
+        }
         this_passcard_visits.append(visit_info)
     context = {
         'passcard': passcard,

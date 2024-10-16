@@ -32,17 +32,19 @@ class Visit(models.Model):
 
     def get_duration(self):
         if not self.leaved_at:
-            seconds = (django.utils.timezone.now() 
+            seconds = (django.utils.timezone.now()
                        - self.entered_at).total_seconds()
             return seconds
-        else:
-            seconds = (self.leaved_at - self.entered_at).total_seconds()
-            return seconds
+        seconds = (self.leaved_at - self.entered_at).total_seconds()
+        return seconds
 
     def format_duration(self):
-        hours, remainder = divmod(self.get_duration(), 3600)
-        minutes, seconds = divmod(remainder, 60)
-        return str(f'{int(hours)}:{int(minutes)}:{int(seconds)}')
+        seconds_in_hour = 3600
+        seconds_in_minute = 60
+        hours, remainder = divmod(self.get_duration(), seconds_in_hour)
+        minutes, seconds = divmod(remainder,  seconds_in_minute)
+        return str(f'{int(hours):02}:{int(minutes):02}:{int(seconds):02}')
 
     def is_visit_long(self, minutes=60):
-        return self.get_duration()/60 > minutes
+        seconds_in_minute = 60
+        return self.get_duration()/seconds_in_minute > minutes
